@@ -4,7 +4,7 @@ import type { PrismaClient } from "@rakazo/db";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { APIError } from "better-auth/api";
-import { bearer, organization } from "better-auth/plugins";
+import { organization } from "better-auth/plugins";
 
 export interface AuthEnv {
   secret: string;
@@ -12,7 +12,6 @@ export interface AuthEnv {
   webOrigin: string;
   signupsEnabled: string | undefined;
   signupAllowlist: string | undefined;
-  extraOrigins?: string[];
   beforeDeleteUser?: (userId: string) => Promise<void>;
 }
 
@@ -25,7 +24,7 @@ export function createAuth(prisma: PrismaClient, env: AuthEnv) {
     appName: "Rakazo",
     secret: env.secret,
     baseURL: env.baseURL,
-    trustedOrigins: [env.webOrigin, env.baseURL, ...(env.extraOrigins ?? [])],
+    trustedOrigins: [env.webOrigin, env.baseURL],
     database: prismaAdapter(prisma, { provider: "postgresql" }),
     emailAndPassword: {
       enabled: true,
@@ -62,7 +61,6 @@ export function createAuth(prisma: PrismaClient, env: AuthEnv) {
       },
     },
     plugins: [
-      bearer(),
       organization({
         allowUserToCreateOrganization: false,
         creatorRole: "owner",

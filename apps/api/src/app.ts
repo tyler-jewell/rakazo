@@ -187,7 +187,7 @@ export async function createApp(
     return auth.handler(c.req.raw);
   });
   app.use("/rpc/*", async (c, next) => {
-    const session = await auth.api.getSession({ headers: sessionHeaders(c.req.raw) });
+    const session = await auth.api.getSession({ headers: c.req.raw.headers });
     const actor = session?.user
       ? await requireMembership(prisma, session.user.id).catch(() => null)
       : null;
@@ -240,11 +240,3 @@ function isTrustedOrigin(origin: string, env: AppEnv) {
   }
 }
 
-function sessionHeaders(request: Request) {
-  const headers = new Headers(request.headers);
-  const authz = headers.get("authorization");
-  if (authz?.toLowerCase().startsWith("bearer ") && !headers.get("cookie")) {
-    headers.set("cookie", `better-auth.session_token=${authz.slice(7).trim()}`);
-  }
-  return headers;
-}
