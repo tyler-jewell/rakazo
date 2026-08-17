@@ -1,4 +1,3 @@
-import { rm } from "node:fs/promises";
 import { RPCHandler } from "@orpc/server/fetch";
 import type { JobPublisher, RealtimeFanout, SandboxProvider } from "@rakazo/adapter-kit";
 import {
@@ -11,7 +10,6 @@ import {
   type DestinationEmulator,
   destroyBot,
   EncryptedSecretStore,
-  ExpoPushProvider,
   GraphileJobPublisher,
   InMemoryJobQueue,
   InMemoryRealtimeFanout,
@@ -20,7 +18,6 @@ import {
   PiAgentRuntime,
   PiOAuthLogins,
   PostgresRealtimeFanout,
-  pushTokenPath,
   ScriptedAgentRuntime,
 } from "@rakazo/adapters";
 import { blockedAuthPaths, createAuth } from "@rakazo/auth";
@@ -89,22 +86,12 @@ export async function createApp(
   void stack.composio?.warmDirectory().catch(() => undefined);
   const runtime =
     env.agentRuntime === "scripted" ? new ScriptedAgentRuntime() : new PiAgentRuntime();
-  const notifications = new ExpoPushProvider(env.dataDir);
   const auth = createAuth(prisma, {
     secret: env.authSecret,
     baseURL: env.authUrl,
     webOrigin: env.webOrigin,
     signupsEnabled: env.signupsEnabled,
     signupAllowlist: env.signupAllowlist,
-    extraOrigins: [
-      "rakazo://",
-      "exp://",
-      "exp://*",
-      "http://localhost:8081",
-      "http://127.0.0.1:8081",
-      "http://localhost:19006",
-      "http://127.0.0.1:19006",
-    ],
     beforeDeleteUser: async (userId) => {
       const bots = await prisma.bot.findMany({
         where: { userId },
@@ -127,7 +114,6 @@ export async function createApp(
           ),
         ),
       );
-      await rm(pushTokenPath(env.dataDir, userId), { force: true }).catch(() => undefined);
     },
   });
   const executor = createRunExecutor({
@@ -141,7 +127,6 @@ export async function createApp(
     secretStore: secrets,
     deploymentModelKey: env.openRouterKey,
     dataDir: env.dataDir,
-    notifications,
     jobs,
     events,
   });
@@ -247,7 +232,6 @@ export async function createApp(
 function isTrustedOrigin(origin: string, env: AppEnv) {
   if (!origin) return true;
   if (origin === env.webOrigin || origin === env.apiUrl || origin === env.authUrl) return true;
-  if (origin.startsWith("rakazo://") || origin.startsWith("exp://")) return true;
   try {
     const host = new URL(origin).hostname;
     return host === "localhost" || host === "127.0.0.1";

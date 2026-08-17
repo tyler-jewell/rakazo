@@ -235,11 +235,6 @@ export const appContract = {
   export: {
     bot: oc.input(botId).output(ExportManifestSchema),
   },
-  notifications: {
-    registerPush: oc
-      .input(z.object({ token: z.string().min(8).max(512) }))
-      .output(z.object({ ok: z.literal(true) })),
-  },
 };
 
 export type AppContract = typeof appContract;

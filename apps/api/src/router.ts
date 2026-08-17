@@ -29,7 +29,6 @@ import {
   releaseComputerExecutionLease,
   resolveBotWorkspacePath,
   sanitizeComposioError,
-  savePushToken,
   scheduleComputerControlExpiry,
   scheduleComputerSleep,
   scriptedCatalogEntry,
@@ -1384,12 +1383,6 @@ export function createRouter(deps: RouterDeps) {
           files,
           history,
         };
-      }),
-    },
-    notifications: {
-      registerPush: authed.notifications.registerPush.handler(async ({ context, input }) => {
-        await savePushToken(deps.dataDir, context.actor.userId, input.token);
-        return { ok: true as const };
       }),
     },
   });

@@ -1,6 +1,6 @@
 # Self-hosting Rakazo
 
-The signed-in product is a long-running API, a Graphile Worker, Postgres, and a computer provider (Docker supervisor or E2B). It is not a static site. The marketing site in `apps/www` can be hosted separately.
+The signed-in product is a long-running API, a Graphile Worker, Postgres, and a computer provider (Docker supervisor or E2B). It is not a static site.
 
 ## Local (source checkout)
 
@@ -136,8 +136,6 @@ Pull the new source, run `pnpm --filter @rakazo/db migrate`, then restart API an
 
 ## What “Rakazo Cloud” still needs
 
-`apps/www` (Astro, `output: "static"`, `site: https://rakazo.com`) can go live today on Vercel, Cloudflare Pages, or any static host. The waitlist link is `mailto:hello@rakazo.com`. That is the marketing site, not the product.
-
 The product cannot be “pushed live” as a Vercel serverless app. Graphile Worker, Postgres `LISTEN`, Pi runs, and Docker computers need durable processes and a sandbox host.
 
 To run a hosted product (same codebase):
@@ -150,9 +148,6 @@ To run a hosted product (same codebase):
 6. A Hetzner CX22 (2 vCPU / 4 GB) is enough for API + worker + Postgres when E2B owns the desktops. 2 GB works for a quiet box; 8 GB is only needed if you also run Docker computers on that same machine.
 7. Set public HTTPS `WEB_ORIGIN` / `BETTER_AUTH_URL` / `API_URL`, secrets, and an OpenRouter (or other Pi) deployment key if you want to skip per-user model keys.
 8. Put the web app behind the same origin as `/api` and `/rpc` (Vite preview proxy, or a reverse proxy). Docker noVNC connections use short-lived signed `/novnc/*` capabilities; do not replace that route with an unrestricted port proxy.
-9. Deploy `apps/www` to your public website and point `app.example.com` (or similar) at the product origin.
-10. Turn on `SIGNUP_ALLOWLIST` until you want open registration. There is no Rakazo-managed model billing in version 1 — users bring keys.
+9. Turn on `SIGNUP_ALLOWLIST` until you want open registration. There is no Rakazo-managed model billing in version 1 — users bring keys.
 
-Expo / desktop installers are clients of that origin (`EXPO_PUBLIC_API_URL`, `RAKAZO_WEB_URL`). They are not a Cloud control plane.
-
-The iOS and Android app can also point at a self-hosted origin at runtime. On the sign-in screen, tap **Use a custom server** and enter the same HTTPS origin as `WEB_ORIGIN` (for example `https://app.example.com`). Store builds still default to `EXPO_PUBLIC_API_URL`; the in-app setting is an override for people running their own API. Changing the server signs the device out of any previous session.
+The macOS desktop installer is a client of that origin (`RAKAZO_WEB_URL`). It is not a Cloud control plane. The signed-in web app is a PWA of the same origin.

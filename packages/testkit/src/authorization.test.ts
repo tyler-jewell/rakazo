@@ -114,7 +114,6 @@ describeWithDatabase("API authorization and resource isolation", () => {
       ["usage/list"],
       ["usage/summary"],
       ["export/bot", { botId: "missing-bot" }],
-      ["notifications/registerPush", { token: "ExponentPushToken[not-real]" }],
     ]);
 
     const results = await Promise.all(

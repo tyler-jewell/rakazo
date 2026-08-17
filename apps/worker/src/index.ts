@@ -11,7 +11,6 @@ import {
   createRunExecutor,
   createRunSandbox,
   EncryptedSecretStore,
-  ExpoPushProvider,
   GraphileJobPublisher,
   GraphileJobWorkerHost,
   InMemoryJobQueue,
@@ -67,7 +66,6 @@ async function main() {
     secretStore: secrets,
     deploymentModelKey: process.env.OPENROUTER_API_KEY,
     dataDir,
-    notifications: new ExpoPushProvider(dataDir),
     jobs,
     events,
   });

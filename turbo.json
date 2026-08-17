@@ -9,9 +9,7 @@
       "env": [
         "BETTER_AUTH_SECRET",
         "DATABASE_URL",
-        "ENCRYPTION_KEY",
-        "PUBLIC_POSTHOG_HOST",
-        "PUBLIC_POSTHOG_KEY"
+        "ENCRYPTION_KEY"
       ],
       "outputs": ["dist/**", "src/generated/**"]
     },
@@ -24,7 +22,6 @@
     },
     "dev": {
       "cache": false,
-      "env": ["PUBLIC_POSTHOG_HOST", "PUBLIC_POSTHOG_KEY"],
       "persistent": true
     }
   }

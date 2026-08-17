@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "pnpm build && electron .",
     "build": "tsc -p tsconfig.json && cp src/preload.cjs dist/preload.cjs",
-    "pack": "pnpm build && electron-builder --mac --win --linux",
+    "pack": "pnpm build && electron-builder --mac",
     "pack:dir": "pnpm build && electron-builder --dir",
     "check": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run --root ../.. apps/desktop/src",
@@ -43,18 +43,6 @@
       "target": [
         "dmg",
         "zip"
-      ]
-    },
-    "win": {
-      "icon": "assets/icon.ico",
-      "target": [
-        "nsis"
-      ]
-    },
-    "linux": {
-      "icon": "assets/icon.png",
-      "target": [
-        "AppImage"
       ]
     }
   }

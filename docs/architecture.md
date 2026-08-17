@@ -5,10 +5,8 @@ One picture of the product: clients, the always-on API and worker, durable store
 ```mermaid
 flowchart TB
   subgraph clients["Clients — same contracts, not a control plane"]
-    www["apps/www · Astro<br/>rakazo.com marketing only"]
-    web["apps/web · React 19 + Vite :5173"]
-    desk["apps/desktop · Electron<br/>hosts the web UI"]
-    mob["apps/mobile · Expo"]
+    web["apps/web · React 19 + Vite PWA :5173"]
+    desk["apps/desktop · Electron macOS<br/>hosts the web UI"]
     desk --> web
   end
 
@@ -23,9 +21,6 @@ flowchart TB
   web --> auth
   web --> rpc
   web --> novnc
-  mob --> auth
-  mob --> rpc
-  mob --> novnc
 
   subgraph persist["2  Persist the turn"]
     send["threads.send / followUp / answer<br/>or routine.wakeup / spawn_bot"]
@@ -44,7 +39,6 @@ flowchart TB
   write --> jobs
   write --> realtime
   realtime -->|"threads.subscribe cursor"| web
-  realtime --> mob
 
   subgraph processes["4  Always-on processes share adapters"]
     apiProc["API process<br/>auth, RPC, screen proxy"]
@@ -115,7 +109,7 @@ flowchart TB
 
   subgraph durable["10  Durable stores"]
     pg[("Postgres 16 + Prisma<br/>workspace=Organization<br/>Bot 1—1 Thread · Computer<br/>Run · Attempt · Event · Routine<br/>Memory · Secret · Connection")]
-    datadir[("DATA_DIR<br/>LocalAgentHomeStore<br/>homes/ + home-revisions/<br/>browser profiles · Expo push tokens")]
+    datadir[("DATA_DIR<br/>LocalAgentHomeStore<br/>homes/ + home-revisions/<br/>browser profiles")]
   end
 
   write --> pg
@@ -128,7 +122,7 @@ flowchart TB
 
   subgraph finalize["11  Finalize"]
     ckpt["Checkpoint workspace<br/>on complete, fail, stop, idle"]
-    done["run completed / failed / cancelled<br/>bot message + usage + Expo push"]
+    done["run completed / failed / cancelled<br/>bot message + usage"]
     sleep["schedule computer.sleep"]
     ckpt --> done --> sleep
   end

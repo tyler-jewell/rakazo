@@ -4,7 +4,7 @@
 
 Open-source Grok Bot alternative, built with Cursor and Grok 4.6.
 
-Web, desktop, and mobile. Bring your own AI and sandbox. The product is still early (beta).
+Installable web app (PWA) and macOS desktop. Bring your own AI and sandbox. The product is still early (beta).
 
 Each bot has one thread, one computer, memory, routines, and history. A bot can also spawn more bots — each a regular peer with its own thread and computer — or run short-lived subagents inside the current turn. This repository is the complete core product — it runs without a Rakazo-operated control plane.
 
@@ -16,8 +16,7 @@ https://github.com/user-attachments/assets/dccdeddb-2134-4a56-8eed-b2e591736b1c
 
 - TypeScript
 - React 19, Vite, Tailwind
-- Electron
-- Expo
+- Electron (macOS)
 - Hono, oRPC
 - Postgres, Prisma
 - Better Auth
@@ -74,7 +73,7 @@ Product defaults are Pi + Docker + Graphile. `pnpm test` pins the emulators (`AG
 
 ### Computer and app modes
 
-The app you open and the computer provider are separate choices. Web, Electron, and mobile are clients of the same API. Docker stays the default. In the Electron app the deployment owner is asked once whether bots should keep using Docker or run on this Mac as you.
+The app you open and the computer provider are separate choices. The PWA web app and the macOS Electron app are clients of the same API. Docker stays the default. In the Electron app the deployment owner is asked once whether bots should keep using Docker or run on this Mac as you.
 
 | `SANDBOX_PROVIDER` | Where agent commands run | Best fit | Isolation notes |
 | --- | --- | --- | --- |
@@ -109,7 +108,7 @@ Packaged installers (optional):
 pnpm --filter @rakazo/desktop pack
 ```
 
-Outputs land in `apps/desktop/out/` (macOS dmg/zip, Windows NSIS, Linux AppImage). Those builds still need a running API and web origin.
+Outputs land in `apps/desktop/out/` (macOS dmg/zip). Those builds still need a running API and web origin.
 
 ## Test
 
@@ -140,16 +139,14 @@ See [`docs/computer-runtime.md`](./docs/computer-runtime.md) for the agent/runti
 ## Layout
 
 ```
-apps/web api worker desktop mobile www
+apps/web api worker desktop
 packages/core contracts db auth memory ui-web adapter-kit adapters testkit
 infra/compose sandboxes
 ```
 
-`apps/www` is the public marketing site (`rakazo.com`). It is not the signed-in product.
-
 ## Self-host and Cloud
 
-See `docs/self-host.md`. Cloud and self-hosted editions share the same application and contracts. There is no separate Rakazo-hosted control plane in this repo yet — a public Cloud deploy is a VPS (or E2B) plus the marketing site, not a serverless push of the chat app.
+See `docs/self-host.md`. Cloud and self-hosted editions share the same application and contracts. There is no separate Rakazo-hosted control plane in this repo yet — a public Cloud deploy is a VPS (or E2B), not a serverless push of the chat app.
 
 ---
 
