@@ -50,7 +50,7 @@ export async function createApp(
   created.pool?.on("error", () => undefined);
   const realtime =
     overrides.realtime ??
-    (created.pool
+    (created.pool && env.wakeupDriver !== "memory"
       ? new PostgresRealtimeFanout({
           connectionString: env.realtimeDatabaseUrl,
           publisher: created.pool,
@@ -222,6 +222,7 @@ export async function createApp(
       await jobs.close();
       await realtime.close();
       await connector.stop();
+      await sandbox.close?.();
       await prisma.$disconnect().catch(() => undefined);
       await created.pool?.end().catch(() => undefined);
     },

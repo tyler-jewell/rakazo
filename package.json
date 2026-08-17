@@ -10,6 +10,7 @@
   },
   "scripts": {
     "dev": "turbo dev --filter=@rakazo/api --filter=@rakazo/worker --filter=@rakazo/web --filter=@rakazo/sandbox-supervisor",
+    "dev:local": "tsx scripts/dev-local.ts",
     "build": "turbo build",
     "check": "turbo check",
     "lint": "biome check .",

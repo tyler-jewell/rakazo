@@ -28,6 +28,7 @@ import {
 } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { authClient } from "../lib/auth";
+import { embeddableScreenUrl } from "../lib/embed-screen";
 import { rpc } from "../lib/rpc";
 import {
   isComputerStatusEvent,
@@ -1685,22 +1686,6 @@ function DeleteBotDialog({
       </div>
     </div>
   );
-}
-
-function embeddableScreenUrl(url: string | null): string | null {
-  if (!url) return null;
-  try {
-    const parsed = new URL(url, window.location.href);
-    const page = new URL(window.location.href);
-    const local = parsed.hostname === "127.0.0.1" || parsed.hostname === "localhost";
-    const pagePort = page.port || (page.protocol === "https:" ? "443" : "80");
-    if (local && parsed.port && parsed.port !== pagePort) {
-      return null;
-    }
-    return parsed.toString();
-  } catch {
-    return url;
-  }
 }
 
 function screenIframeSandbox(url: string | null) {

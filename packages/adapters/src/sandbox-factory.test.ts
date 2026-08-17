@@ -34,6 +34,17 @@ describe("createRunSandbox", () => {
     signal: new AbortController().signal,
   };
 
+  it("serves an http desktop screen for the local fake provider", async () => {
+    const sandbox = createRunSandbox("fake", {});
+    const computer = await sandbox.provision({ botId: "local-screen", homePath: "/tmp/ls" }, ctx);
+    const session = await sandbox.connectScreen(computer, { view: "stream" }, ctx);
+    expect(session.url).toMatch(/^http:\/\/127\.0\.0\.1:\d+\/embed\.html$/);
+    const body = await (await fetch(session.url)).text();
+    expect(body).toContain("desktop-stream");
+    await sandbox.destroy(computer, ctx);
+    await sandbox.close?.();
+  });
+
   it("keeps SANDBOX_PROVIDER=desktop as a host-user computer", async () => {
     const sandbox = createRunSandbox("desktop", {});
     expect(sandbox.describe().id).toBe("desktop");

@@ -98,6 +98,7 @@ export interface SandboxProvider {
   keepAlive?(computer: ComputerRef): Promise<void>;
   stop(computer: ComputerRef, context: AdapterContext): Promise<void>;
   destroy(computer: ComputerRef, context: AdapterContext): Promise<void>;
+  close?(): Promise<void>;
 }
 
 export interface ConnectorProvider {

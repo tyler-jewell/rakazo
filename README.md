@@ -58,6 +58,14 @@ pnpm dev
 
 `pnpm dev` starts the API (`:3100`), Graphile Worker, Vite web app (`:5173`), and sandbox supervisor (`:7091`).
 
+To run without Docker or vendor keys:
+
+```bash
+pnpm dev:local
+```
+
+That starts an in-process Postgres (PGlite), the API, and the web app. Computers use the local fake sandbox, which streams a desktop page into the computer pane. Open [http://127.0.0.1:5173](http://127.0.0.1:5173), sign up, skip the model key, create a bot, and open the computer pane.
+
 Open [http://127.0.0.1:5173](http://127.0.0.1:5173). Sign up, pick a model from the Pi catalog (paste an API key, sign in with ChatGPT / Copilot / SuperGrok, or Skip if the deployment key is set), create a bot, send a message. The computer pane is a live Linux desktop. The model can observe and control the screen, use browsers and other graphical applications, run terminal commands, and work with files. You can interact with the same desktop while it runs; taking control makes the viewer editable but does not impose an exclusive agent/user lock. Ask a bot to spawn another bot, or to run a subagent for work that should stay inside this turn.
 
 Confirm the product path:

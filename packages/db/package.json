@@ -18,6 +18,8 @@
     "test": "vitest run --root ../.. packages/db/src"
   },
   "dependencies": {
+    "@electric-sql/pglite": "0.3.11",
+    "@electric-sql/pglite-socket": "0.0.16",
     "@rakazo/adapter-kit": "workspace:*",
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",

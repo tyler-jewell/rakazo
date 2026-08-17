@@ -18,6 +18,7 @@ import {
   normalizeWorkspacePath,
   placeholderObservation,
 } from "./computer-support.js";
+import { LocalDesktopScreen } from "./local-desktop-screen.js";
 
 export interface FakeBox {
   ref: ComputerRef;
@@ -28,6 +29,9 @@ export interface FakeBox {
 
 export class FakeSandboxProvider implements SandboxProvider {
   readonly boxes = new Map<string, FakeBox>();
+  private screen: LocalDesktopScreen | undefined;
+
+  constructor(private readonly opts: { serveScreen?: boolean } = {}) {}
 
   describe() {
     return {
@@ -99,11 +103,25 @@ export class FakeSandboxProvider implements SandboxProvider {
     _request: ScreenRequest,
     _context: AdapterContext,
   ): Promise<ScreenSession> {
+    if (this.opts.serveScreen) {
+      this.screen ??= new LocalDesktopScreen();
+      await this.screen.listen();
+      return {
+        url: this.screen.url(),
+        mimeType: "text/html",
+        close: async () => undefined,
+      };
+    }
     return {
       url: `fake://screen/${computer.id}`,
       mimeType: "text/plain",
       close: async () => undefined,
     };
+  }
+
+  async close() {
+    await this.screen?.close();
+    this.screen = undefined;
   }
 
   async sendInput(

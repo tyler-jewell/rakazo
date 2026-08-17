@@ -61,5 +61,8 @@ export function createRunSandbox(kind: string, opts: SandboxProviderOptions): Sa
       hostRoots: [homedir()],
     });
   }
+  if (kind === "fake") {
+    return new FakeSandboxProvider({ serveScreen: true });
+  }
   return createSandboxProvider(kind, opts);
 }
