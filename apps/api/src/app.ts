@@ -239,4 +239,3 @@ function isTrustedOrigin(origin: string, env: AppEnv) {
     return false;
   }
 }
-
