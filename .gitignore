@@ -16,8 +16,6 @@ apps/**/data
 .tmp
 .DS_Store
 apps/web/dist
-apps/desktop/dist
-apps/desktop/out
 apps/mobile/.expo
 apps/mobile/dist
 apps/mobile/ios

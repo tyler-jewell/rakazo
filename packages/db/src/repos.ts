@@ -136,10 +136,7 @@ export function createRepos(prisma: PrismaClient) {
         });
         if (!parent) throw new IsolationError();
       }
-      const settings = await prisma.deploymentSettings.findUnique({ where: { id: "default" } });
-      const envKind = process.env.SANDBOX_PROVIDER ?? "docker";
-      const kind =
-        envKind === "docker" && settings?.computerHost === "this-mac" ? "desktop" : envKind;
+      const kind = process.env.SANDBOX_PROVIDER ?? "docker";
       const bot = await prisma.$transaction(async (tx) => {
         const teamComputer = await ensureComputerRecord(tx, {
           mode: "team",

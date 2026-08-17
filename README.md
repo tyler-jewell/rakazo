@@ -4,7 +4,7 @@
 
 Open-source Grok Bot alternative, built with Cursor and Grok 4.6.
 
-Installable web app (PWA) and macOS desktop. Bring your own AI and sandbox. The product is still early (beta).
+Installable web app (PWA). Bring your own AI and sandbox. The product is still early (beta).
 
 Each bot has one thread, one computer, memory, routines, and history. A bot can also spawn more bots — each a regular peer with its own thread and computer — or run short-lived subagents inside the current turn. This repository is the complete core product — it runs without a Rakazo-operated control plane.
 
@@ -16,7 +16,6 @@ https://github.com/user-attachments/assets/dccdeddb-2134-4a56-8eed-b2e591736b1c
 
 - TypeScript
 - React 19, Vite, Tailwind
-- Electron (macOS)
 - Hono, oRPC
 - Postgres, Prisma
 - Better Auth
@@ -71,15 +70,15 @@ You want `"runtime":"pi"`, `"sandbox":"docker"`, `"jobs":"graphile"`, and `"real
 
 Product defaults are Pi + Docker + Graphile. `pnpm test` pins the emulators (`AGENT_RUNTIME=scripted`, `SANDBOX_PROVIDER=fake`, `WAKEUP_DRIVER=memory`) so default tests never call live models or Composio.
 
-### Computer and app modes
+### Computer providers
 
-The app you open and the computer provider are separate choices. The PWA web app and the macOS Electron app are clients of the same API. Docker stays the default. In the Electron app the deployment owner is asked once whether bots should keep using Docker or run on this Mac as you.
+The PWA web app is the only frontend. Docker stays the default computer provider.
 
 | `SANDBOX_PROVIDER` | Where agent commands run | Best fit | Isolation notes |
 | --- | --- | --- | --- |
-| `docker` (default) | A Docker computer on your machine. The Electron app can switch this to This Mac without changing the env var. | Quick local setup and trusted single-machine self-hosting | Workspace bots share the Team Computer by default; Private computers are optional. The supervisor controls the local Docker daemon, so keep its port private; Rakazo does this by default. |
-| `e2b` | A remote E2B desktop through the E2B SDK | Public or multi-user deployments | Team and Private computers are isolated from the Rakazo application host. Requires `E2B_API_KEY`. Workspace and browser-profile data are checkpointed into Rakazo-owned `DATA_DIR`, so the provider machine is not the durable source of truth. This Mac is not available. |
-| `desktop` | Directly on the API/worker host. Working directories under the process user's home folder are allowed. | A trusted single-user local process | Least isolated. Model-initiated shell commands run with the Rakazo process's OS permissions. Do not use it on a public or shared server. The Electron first-run "This Mac" choice uses this provider while leaving `SANDBOX_PROVIDER=docker`. |
+| `docker` (default) | A Docker computer on your machine. | Quick local setup and trusted single-machine self-hosting | Workspace bots share the Team Computer by default; Private computers are optional. The supervisor controls the local Docker daemon, so keep its port private; Rakazo does this by default. |
+| `e2b` | A remote E2B desktop through the E2B SDK | Public or multi-user deployments | Team and Private computers are isolated from the Rakazo application host. Requires `E2B_API_KEY`. Workspace and browser-profile data are checkpointed into Rakazo-owned `DATA_DIR`, so the provider machine is not the durable source of truth. |
+| `desktop` | Directly on the API/worker host. Working directories under the process user's home folder are allowed. | A trusted single-user local process | Least isolated. Model-initiated shell commands run with the Rakazo process's OS permissions. Do not use it on a public or shared server. Set `SANDBOX_PROVIDER=desktop` explicitly. |
 | `fake` | An in-process emulator | Tests only | Does not run a real computer. |
 
 Docker remains the recommended quick start for someone running Rakazo on their own machine. E2B is the safer boundary when untrusted users or public traffic share a deployment.
@@ -89,26 +88,6 @@ If this Postgres was created with `prisma db push` before checked-in migrations 
 ```bash
 pnpm --filter @rakazo/db exec prisma migrate resolve --applied 0001_init
 ```
-
-## Run the desktop app
-
-The Electron shell loads the same web UI. Leave `pnpm dev` running, then:
-
-```bash
-pnpm --filter @rakazo/desktop dev
-```
-
-Native red / yellow / green buttons close, minimize, and zoom that window. They do nothing in the browser tab. On first launch the desktop app asks whether bots should keep using Docker or run on this Mac as you. Docker stays the default. macOS will not show a permission prompt for that choice — the consent is Rakazo's.
-
-Point Electron at a different origin with `RAKAZO_WEB_URL` (default `http://127.0.0.1:5173`).
-
-Packaged installers (optional):
-
-```bash
-pnpm --filter @rakazo/desktop pack
-```
-
-Outputs land in `apps/desktop/out/` (macOS dmg/zip). Those builds still need a running API and web origin.
 
 ## Test
 
@@ -139,7 +118,7 @@ See [`docs/computer-runtime.md`](./docs/computer-runtime.md) for the agent/runti
 ## Layout
 
 ```
-apps/web api worker desktop
+apps/web api worker
 packages/core contracts db auth memory ui-web adapter-kit adapters testkit
 infra/compose sandboxes
 ```

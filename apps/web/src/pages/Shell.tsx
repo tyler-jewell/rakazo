@@ -37,10 +37,8 @@ import {
   reduceThreadSnapshot,
 } from "../lib/thread-events";
 import { BotContextMenu, type ContextMenuPosition } from "./BotContextMenu";
-import { HostComputerPrompt } from "./HostComputerPrompt";
 import { PluginsOverlay } from "./PluginsOverlay";
 import { RoutineSchedule } from "./RoutineSchedule";
-import { WindowChrome } from "./WindowChrome";
 
 type Panel = "computer" | "settings" | "routine" | "create" | null;
 
@@ -407,14 +405,12 @@ export function ShellPage() {
 
   return (
     <div className="relative flex h-full min-w-0 overflow-hidden bg-[#050506] text-[#DFDFE2]">
-      <HostComputerPrompt />
       <aside className="flex w-[316px] shrink-0 flex-col border-r border-[#171719] bg-[#0B0B0C]">
-        <div className="app-drag flex items-center justify-between px-[18px] pb-3 pt-4">
-          <WindowChrome />
+        <div className="flex items-center justify-end px-[18px] pb-3 pt-4">
           <button
             type="button"
             onClick={() => setPanel("create")}
-            className="app-no-drag text-[21px] text-[#7A7A80] hover:text-[#C9C9CE]"
+            className="text-[21px] text-[#7A7A80] hover:text-[#C9C9CE]"
             title="New bot"
           >
             +

@@ -30,7 +30,7 @@ pnpm dev
 | `pnpm check` | TypeScript (`tsc`) across the monorepo. |
 | `pnpm lint` | Biome lint and format check. |
 
-CI runs `pnpm lint`, `pnpm check`, production builds (including Electron preload smoke), `pnpm test`, `pnpm test:integration`, and `pnpm test:e2e` on every PR.
+CI runs `pnpm lint`, `pnpm check`, production builds, `pnpm test`, `pnpm test:integration`, and `pnpm test:e2e` on every PR.
 
 ## Secrets and configuration
 

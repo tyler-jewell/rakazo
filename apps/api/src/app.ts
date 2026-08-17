@@ -74,7 +74,6 @@ export async function createApp(
     daytonaApiUrl: env.daytonaApiUrl,
     daytonaTarget: env.daytonaTarget,
     dataDir: env.dataDir,
-    prisma,
   });
   const secrets = new EncryptedSecretStore(env.encryptionKey);
   const oauthLogins = new PiOAuthLogins();

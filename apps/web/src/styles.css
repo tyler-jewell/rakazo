@@ -22,14 +22,6 @@ body,
   border-radius: 3px;
 }
 
-.app-drag {
-  -webkit-app-region: drag;
-}
-
-.app-no-drag {
-  -webkit-app-region: no-drag;
-}
-
 .rk-schedule-select {
   appearance: none;
   background-color: #24242a;

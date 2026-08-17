@@ -43,7 +43,6 @@ async function main() {
     daytonaApiUrl: process.env.DAYTONA_API_URL,
     daytonaTarget: process.env.DAYTONA_TARGET,
     dataDir,
-    prisma,
   });
   const stack = createConnectorStack(isComposioEnabled(process.env.COMPOSIO_API_KEY));
   const connector = stack.destination;

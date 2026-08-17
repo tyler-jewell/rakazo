@@ -4,10 +4,8 @@ One picture of the product: clients, the always-on API and worker, durable store
 
 ```mermaid
 flowchart TB
-  subgraph clients["Clients — same contracts, not a control plane"]
+  subgraph clients["Client — same contracts, not a control plane"]
     web["apps/web · React 19 + Vite PWA :5173"]
-    desk["apps/desktop · Electron macOS<br/>hosts the web UI"]
-    desk --> web
   end
 
   subgraph origin["1  Product origin — apps/api Hono :3100"]
@@ -99,7 +97,7 @@ flowchart TB
     docker["docker default<br/>supervisor :7091 owns the socket<br/>sibling rakazo/computer + noVNC"]
     e2b["e2b · remote desktop SDK"]
     daytona["daytona"]
-    host["desktop / Electron This Mac<br/>commands as the host user"]
+    host["desktop · host-user commands"]
     fake["fake + emulators · tests"]
     docker --- e2b --- daytona --- host --- fake
   end

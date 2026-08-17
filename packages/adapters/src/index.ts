@@ -19,7 +19,6 @@ export * from "./e2b-sandbox.js";
 export * from "./executor.js";
 export * from "./fake-sandbox.js";
 export * from "./home.js";
-export * from "./host-aware-sandbox.js";
 export * from "./job-reconciler.js";
 export * from "./mcp-emulator.js";
 export * from "./pi-models.js";

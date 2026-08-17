@@ -1,3 +1,4 @@
+import { homedir } from "node:os";
 import type { SandboxProvider } from "@rakazo/adapter-kit";
 import { DaytonaSandboxEmulator } from "./daytona-emulator.js";
 import { DaytonaSandboxProvider } from "./daytona-sandbox.js";
@@ -51,4 +52,14 @@ export function createSandboxProvider(kind: string, opts: SandboxProviderOptions
         `Unknown SANDBOX_PROVIDER "${kind}". Use docker | e2b | daytona | e2b-emulator | daytona-emulator | desktop | fake.`,
       );
   }
+}
+
+export function createRunSandbox(kind: string, opts: SandboxProviderOptions): SandboxProvider {
+  if (kind === "desktop") {
+    return new DesktopSandboxProvider({
+      root: opts.dataDir,
+      hostRoots: [homedir()],
+    });
+  }
+  return createSandboxProvider(kind, opts);
 }
